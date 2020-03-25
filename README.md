@@ -66,6 +66,16 @@ The rank function referenced in this script is in `rank.py` and ranks the values
 
 ### Differential Expression
 
+Differential expression to compute markers was done in R using the Mann Whitney test using custom scripts for efficicency. This is all computed on the entire list of genes in the data, not the 4,201 subset. To get a list of the top 100 markers for a given subclass we separate the data by class and then do 1 vs All DE for each subclass. The Mann Whiteny outputs an adjusted P-value, AUROC and log2FC. For each dataset we classify a gene as DE if the log2FC > 2 and the adjusted p value is <.05. For aggregating across datasets we take the average AUROC and compute recurrence, which is the number of datasets a gene is significantly DE. We rank the genes by recurrence then avg AUROC and take the top 100 genes within the 4,201 list. 
+
+To compute this the data was stored as (SingleCellExperiment)[https://bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html] Ojects. And run using 
+
+```
+Rscript make_de_lists.R
+Rscript make_meta_lists.R
+```
+To make work you will need to change the paths in `datasets.R` 
+
 ### Performance of Modules 
 
 To measure performance of Modules in the network we use the algorithm EGAD, originally published in [Balloz et al 2017 Bioinformatics](https://doi.org/10.1093/bioinformatics/btw695).
