@@ -11,6 +11,10 @@ Data to recapitulate these results can be aquired from [The NEMO archive](https:
 
 We used the aligned data and provided metadata for the 7 datasets. They were downloaded and stored as Andata objects (convert to Loom for use in R) along with the metadata. 
 
+We do include some small critical datafiles here.
+
+`datasets_used.csv` includes GEO numbers of the bulk expression data we used from GEMMA. The actual data can be downloaded and parsed using code in `download_gemma.r` and `parse_gemma_files.r` (Paths will need to be changed).
+
 
 ## Results Figures 
 
