@@ -62,7 +62,49 @@ The rank function referenced in this script is in `rank.py` and ranks the values
 
 ### Performance of Modules 
 
+To measure performance of Modules in the network we use the algorithm EGAD, originally published in [Balloz et al 2017 Bioinformatics](https://doi.org/10.1093/bioinformatics/btw695).
+
+
+![](https://github.com/bharris12/multiscale_brain/blob/master/figures/egad_cartoon.png)
+
+The standard EGAD algorithm is in the file `egad.py`.
+
+The function to actually use it is `runNV`. Below is the doctring for that function
+
+```def run_egad(go, nw, **kwargs):
+    """EGAD running function
+    
+    Wrapper to lower level functions for EGAD
+
+    EGAD measures modularity of gene lists in co-expression networks. 
+
+    This was translated from the MATLAB version, which does tiled Cross Validation
+    
+    The useful kwargs are:
+    int - nFold : Number of CV folds to do, default is 3, 
+    int - {min,max}_count : limits for number of terms in each gene list, these are exclusive values
+
+
+    Arguments:
+        go {pd.DataFrame} -- dataframe of genes x terms of values [0,1], where 1 is included in gene lists
+        nw {pd.DataFrame} -- dataframe of co-expression network, genes x genes
+        **kwargs 
+    
+    Returns:
+        pd.DataFrame -- dataframe of terms x metrics where the metrics are 
+        ['AUC', 'AVG_NODE_DEGREE', 'DEGREE_NULL_AUC', 'P_Value']
+    """
+ ```
+ 
+For figure 3g-h we use a special version of EGAD that computes pairwise EGAD scores between all gene lists. This version of EGAD is in the file `egad_train_test_terms.py` and is run using the function `run_egad_train_test`. The function does not compute anything meaningful for the diagonal, so for figure 3g we replace the diagonal with the normal EGAD output and in 3h we remove the diagonal.
+
+The computation of the train_test egad creates a dense matrix of genes x terms^2, which can get very large in RAM for many terms. The most we ran it with was 200 terms. 
+
 ### Computing Metacells
 
+Metacells were computed using the published [package](https://tanaylab.github.io/metacell/)
 
+At the top of the `compute_metacells.sh` script lists the parameters used and the `metacell_scripts.r` file includes the exact functions and code used to run metacells. 
+
+Other than the installed libraries, you just need a loom file for each dataset, that contains the class label column (to remove non-neuronal cells) and the `highly_expressed_7_datasets_75k.csv` file as the gene inputs. You also will have to change input and output paths to use. 
 
