@@ -15,6 +15,8 @@ We do include some small critical datafiles here.
 
 `datasets_used.csv` includes GEO numbers of the bulk expression data we used from GEMMA. The actual data can be downloaded and parsed using code in `download_gemma.r` and `parse_gemma_files.r` (Paths will need to be changed).
 
+`highly_expressed_7_datasets_75k.csv` contains the list of 4,201 genes used in all of the analysis in the paper. We computed this list by computing the rank of the average expression of each gene in each dataset after excluding all non-neuronal cells. We then took the top 7,500 genes from each dataset and selected every gene that was in 6 of the 7 top 7,500 lists. The code for this can be found in `gene_selection_7_datasets.py`
+
 
 ## Results Figures 
 
