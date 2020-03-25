@@ -76,6 +76,8 @@ Rscript make_meta_lists.R
 ```
 To make work you will need to change the paths in `datasets.R` 
 
+For cases when less than 7 datasets are used for computing the markers we recompute reccurence for the subset of the datasets used.
+
 ### Performance of Modules 
 
 To measure performance of Modules in the network we use the algorithm EGAD, originally published in [Balloz et al 2017 Bioinformatics](https://doi.org/10.1093/bioinformatics/btw695).
