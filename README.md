@@ -3,8 +3,8 @@ Scripts and some small datafiles for "Multiscale Co-expression in the Brain"
 
 In order to do this analysis thousands of data files were created that are not feasible to share. 
 There are lots of scripts and files needed to just manage all the paths and a large portion of all scripts are dedicated just to manage the files or parititoning data. 
-As a result most of these scripts, in their current form will not be directly usable. 
-However, in this README we highlight the scripts that include functions for key algorithms and functions used in the analysis. 
+As a result most of these scripts, in their current form will not be immediately usable. 
+However, in this README we highlight the scripts that include critical functions for key algorithms and functions used in the analysis. 
 
 ## Data 
 Data to recapitulate these results can be aquired from [The NEMO archive](https://assets.nemoarchive.org/dat-ch1nqb7)
