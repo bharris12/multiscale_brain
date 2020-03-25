@@ -41,15 +41,19 @@ def parse_args():
 
 
 def create_nw(data, replace_nans):
-    nw = np.corrcoef(data)
-    np.fill_diagonal(data, 1)
-    nw = rank(nw)
-    if replace_nans:
-        nw[np.isnan(nw)] = bottleneck.nanmean(nw)
-    return nw
-
-@processify
-def create_nw_proc(data, replace_nans):
+    """Compute Co-expression network from the data
+    
+    Core network building function. We always run with replace_nans = True
+    Slicing single cell data will reguarly produce genes with no counts.
+    And any correlation with a vector of all 0s is Nan.
+    
+    Arguments:
+        data {np.array} -- Array of float values in shape of genes x cells
+        replace_nans {bool} -- Flag for whether to replace Nans in network
+    
+    Returns:
+        np.array -- ranked co-expression matrix of genes x genes 
+    """
     nw = np.corrcoef(data)
     np.fill_diagonal(data, 1)
     nw = rank(nw)
