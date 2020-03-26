@@ -5,16 +5,16 @@ import bottleneck
 import matplotlib.pyplot as plt
 
 def run_egad_train_test(go, nw, **kwargs):
-    """EGAD running function
+    """EGAD GeneList Train Test Functions:
     
-    Wrapper to lower level functions for EGAD
+    Wrapper to lower level functions for EGAD Train Test
 
-    EGAD measures modularity of gene lists in co-expression networks. 
+    EGAD measures modularity of gene lists in co-expression networks. When running 
+    the Train Test version, we measure how well one gene list predicts another.
+    We compute every possible pairwise combination of gene pairs given in the GO
 
-    This was translated from the MATLAB version, which does tiled Cross Validation
     
-    The useful kwargs are:
-    int - nFold : Number of CV folds to do, default is 3, 
+    The useful kwargs are: 
     int - {min,max}_count : limits for number of terms in each gene list, these are exclusive values
 
 
@@ -24,8 +24,8 @@ def run_egad_train_test(go, nw, **kwargs):
         **kwargs 
     
     Returns:
-        pd.DataFrame -- dataframe of terms x metrics where the metrics are 
-        ['AUC', 'AVG_NODE_DEGREE', 'DEGREE_NULL_AUC', 'P_Value']
+        pd.DataFrame -- dataframe of terms x terms where every value is an AUROC of training's (row) 
+        term prediciton of the testing term (column)
     """
     assert nw.shape[0] == nw.shape[1] , 'Network is not square'
     assert np.all(nw.index == nw.columns) , 'Network index and columns are not in the same order'
