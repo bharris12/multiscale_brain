@@ -29,7 +29,6 @@ They are titled by the figures they include in them. The only figure not created
 the code for that figure is in the scripts folder in the file `figure2c_sankey.r`.
 
 
-
 ## Algorithms
 In our analysis there are 4 main algorithms/functions used in the analysis 
 
@@ -68,6 +67,7 @@ This function was used in `compute_all_networks.py`, `compute_all_metacell_nws.p
 
 The rank function referenced in this script is in `rank.py` and ranks the values in the matrix between 0 and 1
 
+Thousands of networks were built from all the different paritions of the data. We always use aggregate networks from each dataset and then aggregate datasets together. To build the dataset specific networks for the class, subclass and cluster level data we used `aggregate_networks.ipynb`. For aggregating the metacell networks we have that in the notebook `figure2bc_3bc.ipynb`. The script `compute_all_metacell_nws.py` is extremely RAM intensive for the larger datasets. We haven't be able to solve a memory leak issue, and it would likely be best to modify the script to create each network as it's own process and save to file, then read in by dataset all the intermediate networks. 
 
 ### Differential Expression
 
