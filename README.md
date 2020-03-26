@@ -1,21 +1,19 @@
 # Multiscale Co-expression in the Brain
-Scripts and some small datafiles for "Multiscale Co-expression in the Brain"
+Scripts and small datafiles for "Multiscale Co-expression in the Brain"
 
-In order to do this analysis thousands of data files were created that are not feasible to share. 
-There are lots of scripts and files needed to just manage all the paths and a large portion of all scripts are dedicated just to manage the files or parititoning data. 
-As a result **these scripts, in their current form, will not be immediately usable**. 
-However, in this README we highlight the scripts that include critical functions for key algorithms and functions used in the analysis. 
+ **These scripts, in their current form, will not be immediately usable**. We highlight the scripts that include critical functions for key algorithms and functions used in the analysis. We also include the notebooks used to create figures. 
 
+### Environment
 All of the analysis was done in either python3 or R. An overview of the python3 environment is in `python_requirements.txt`. In the repository  `r_session_info.yaml` describes the R environment. 
 
-Most scripts are run on the command line and include command line arguments to change parameters. In general scripts are run on a per dataset basis. Datasets are referenced using a name and then the programs rely on a dictionary that is stored in a file to map the location of the Andata File and cluster annotation info. A few scripts, mainly related to the Network Performance section are used in the notebooks.
+Unless otherwise stated, scripts are run on the command line and include command line arguments to change parameters. 
 
 ## Data 
 Data to recapitulate these results can be aquired from [The NEMO archive](https://assets.nemoarchive.org/dat-ch1nqb7)
 
-We used the aligned data and provided metadata for the 7 datasets. They were downloaded and stored as Andata objects (convert to Loom for use in R) along with the metadata. 
+We used the aligned data and provided metadata for the 7 datasets. They were downloaded and stored as Andata objects (convert to Loom or SingleCellExperiments for use in R) along with the metadata. In the programs, datasets are referenced using a name and then the programs rely on a dictionary that is stored in a file to map the location of the Andata File and cluster annotation info. In the code this dictionary is stored as the variable `dataset_dict`. 
 
-We do include some small critical datafiles here.
+As github is not designed for sharing data, especially, larger data, we only include a few small and critical datafiles.
 
 `datasets_used.csv` includes GEO numbers of the bulk expression data we used from GEMMA. The actual data can be downloaded and parsed using code in `download_gemma.r` and `parse_gemma_files.r` (Paths will need to be changed).
 
@@ -25,8 +23,7 @@ We do include some small critical datafiles here.
 ## Results Figures 
 
 In this repository there is a notebooks folder that includes ipython notebooks that were used to generate the results figures.
-They are titled by the figures they include in them. The only figure not created in a notebook was the sankey (riverplot) in Figure 2c,
-the code for that figure is in the scripts folder in the file `figure2c_sankey.r`.
+They are titled by the figures they include in them. The only figure not created in a notebook was the sankey (riverplot) in Figure 2c, the code for that figure is in the scripts folder in the file `figure2c_sankey.r`.
 
 
 ## Algorithms
@@ -67,7 +64,7 @@ This function was used in `compute_all_networks.py`, `compute_all_metacell_nws.p
 
 The rank function referenced in this script is in `rank.py` and ranks the values in the matrix between 0 and 1
 
-Thousands of networks were built from all the different paritions of the data. We always use aggregate networks from each dataset and then aggregate datasets together. To build the dataset specific networks for the class, subclass and cluster level data we used `aggregate_networks.ipynb`. For aggregating the metacell networks we have that in the notebook `figure2bc_3bc.ipynb`. The script `compute_all_metacell_nws.py` is extremely RAM intensive for the larger datasets. We haven't be able to solve a memory leak issue, and it would likely be best to modify the script to create each network as it's own process and save to file, then read in by dataset all the intermediate networks. 
+We always use aggregate networks from each dataset and then aggregate datasets together. To build the dataset specific networks for the class, subclass and cluster level data we used `aggregate_networks.ipynb`. For aggregating the metacell networks we have that in the notebook `figure2bc_3bc.ipynb`. The script `compute_all_metacell_nws.py` is extremely RAM intensive for the larger datasets. We haven't be able to solve a memory leak issue, and it would likely be best to modify the script to create each network as it's own process and save to file, then read in by dataset all the intermediate networks. 
 
 ### Differential Expression
 
