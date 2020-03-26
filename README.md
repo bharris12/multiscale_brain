@@ -8,6 +8,7 @@ However, in this README we highlight the scripts that include critical functions
 
 All of the analysis was done in either python3 or R. An overview of the python3 environment is in `python_requirements.txt`. In the repository  `r_session_info.yaml` describes the R environment. 
 
+Most scripts are run on the command line and include command line arguments to change parameters. In general scripts are run on a per dataset basis. Datasets are referenced using a name and then the programs rely on a dictionary that is stored in a file to map the location of the Andata File and cluster annotation info. A few scripts, mainly related to the Network Performance section are used in the notebooks.
 
 ## Data 
 Data to recapitulate these results can be aquired from [The NEMO archive](https://assets.nemoarchive.org/dat-ch1nqb7)
