@@ -61,22 +61,55 @@ def create_nw(data, replace_nans):
     return nw
  ```
 This function was used in `compute_all_networks.py`, `compute_all_metacell_nws.py` and `create_bulk_rna_brain_nws.py`
+For immediate use the function is in `network_building.py`.
 
 The rank function referenced in this script is in `rank.py` and ranks the values in the matrix between 0 and 1
 
-We always use aggregate networks from each dataset and then aggregate datasets together. To build the dataset specific networks for the class, subclass and cluster level data we used `aggregate_networks.ipynb`. For aggregating the metacell networks we have that in the notebook `figure2bc_3bc.ipynb`. The script `compute_all_metacell_nws.py` is extremely RAM intensive for the larger datasets. We haven't be able to solve a memory leak issue, and it would likely be best to modify the script to create each network as it's own process and save to file, then read in by dataset all the intermediate networks. 
+
+We always use aggregate networks from each dataset and then aggregate datasets together. To build the dataset specific networks for the class, subclass and cluster level data we used `aggregate_networks.ipynb`. Below is the general network aggregation function, which is available in `network_building.py`
+
+```
+def nw_aggregation(nw_paths, genes, file_key='nw'):
+    """Function for aggregating co-expression networks
+    
+    Takes a list of paths to HDF5 files and reads in networks,
+    avearges them and then re-ranks.
+
+    Each HDF5 needs to be in the Pytable in the fixed format with
+    the network stored under the key listed in the keyword argument file_key
+    
+    Arguments:
+        nw_paths {list} -- list of strings or paths to HDF5 files
+        genes {np.array} -- numpy array of genes for network
+    
+    Keyword Arguments:
+        file_key {str} --  key in HDF5 network is stored under (default: {'nw'})
+    
+    Returns:
+        pd.DataFrame -- Aggregate Network
+    """
+
+    agg_nw = np.zeros([genes.shape[0], genes.shape[0]])
+    for nw_path in nw_paths:
+        nw = pd.read_hdf(nw_path,file_key)
+        agg_nw +=nw.values
+        del nw
+        gc.collect()
+
+    return pd.DataFrame(rank(agg_nw),index=genes, columns=genes)
+```
 
 ### Differential Expression
 
-Differential expression to compute markers was done in R using the Mann Whitney test using custom scripts for efficicency. This is all computed on the entire list of genes in the data, not the 4,201 subset. To get a list of the top 100 markers for a given subclass we separate the data by class and then do 1 vs All DE for each subclass. The Mann Whiteny outputs an adjusted P-value, AUROC and log2FC. For each dataset we classify a gene as DE if the log2FC > 2 and the adjusted p value is <.05. For aggregating across datasets we take the average AUROC and compute recurrence, which is the number of datasets a gene is significantly DE. We rank the genes by recurrence then avg AUROC and take the top 100 genes within the 4,201 list. 
+Meta-analytic marker lists are built by aggregating marker genes from individual datasets. For each dataset, a list of putative marker genes is built using a one-vs-all Wilcoxon test to prioritize genes (converted to equivalent AUROC score). The dataset-specific marker lists are then combined into meta-analytic lists ranked primarily by recurrence (number of datasets where gene was detected as DE), secondarily by auroc ("de") or fold change ("fc"). Note that subclass-specific markers are computed within classes, e.g. Vip markers are extracted by finding genes that are differentially expressed with respect to all other GABAergic subclasses.
 
 To compute this the data was stored as (SingleCellExperiment)[https://bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html] Ojects. And run using 
 
+After creating SingleCellExperimentObjects, changing paths in `datasets.R` run the below commands to compute the markers.
 ```
 Rscript make_de_lists.R
 Rscript make_meta_lists.R
 ```
-To make work you will need to change the paths in `datasets.R` 
 
 For cases when less than 7 datasets are used for computing the markers we recompute reccurence for the subset of the datasets used.
 
@@ -87,9 +120,15 @@ To measure performance of Modules in the network we use the algorithm EGAD, orig
 
 ![](https://github.com/bharris12/multiscale_brain/blob/master/figures/egad_cartoon.png)
 
-The standard EGAD algorithm is in the file `egad.py`.
+We use two versions of EGAD, both exist in standalone files and can be imported into any workflow as is.
+The files are 
+```
+egad.py
+egad_train_test_terms.py
+```
+The standard EGAD algorithm is in the file `egad.py`, and is usable with any reference network (like GO) and any co-expression network. 
 
-The function to actually use it is `runNV`. Below is the doctring for that function
+The function use it is `runNV`. Below is the doctring for that function
 
 ```def run_egad(go, nw, **kwargs):
     """EGAD running function
@@ -116,7 +155,34 @@ The function to actually use it is `runNV`. Below is the doctring for that funct
     """
  ```
  
-For figure 3g-h we use a special version of EGAD that computes pairwise EGAD scores between all gene lists. This version of EGAD is in the file `egad_train_test_terms.py` and is run using the function `run_egad_train_test`. The function does not compute anything meaningful for the diagonal, so for figure 3g we replace the diagonal with the normal EGAD output and in 3h we remove the diagonal.
+For figure 3g-h we use a variation of the original EGAD that computes pairwise EGAD scores between all gene lists. This version of EGAD is in the file `egad_train_test_terms.py` and is run using the function `run_egad_train_test`. The function does not compute anything meaningful for the diagonal, so for figure 3g we replace the diagonal with the normal EGAD output and in 3h we remove the diagonal.
+
+Below is the docstring for the EGAD train test version.
+```
+def run_egad_train_test(go, nw, **kwargs):
+    """EGAD GeneList Train Test Functions:
+    
+    Wrapper to lower level functions for EGAD Train Test
+
+    EGAD measures modularity of gene lists in co-expression networks. When running 
+    the Train Test version, we measure how well one gene list predicts another.
+    We compute every possible pairwise combination of gene pairs given in the GO
+
+    
+    The useful kwargs are: 
+    int - {min,max}_count : limits for number of terms in each gene list, these are exclusive values
+
+
+    Arguments:
+        go {pd.DataFrame} -- dataframe of genes x terms of values [0,1], where 1 is included in gene lists
+        nw {pd.DataFrame} -- dataframe of co-expression network, genes x genes
+        **kwargs 
+    
+    Returns:
+        pd.DataFrame -- dataframe of terms x terms where every value is an AUROC of training's (row) 
+        term prediciton of the testing term (column)
+    """
+```
 
 The computation of the train_test egad creates a dense matrix of genes x terms^2, which can get very large in RAM for many terms. The most we ran it with was 200 terms. 
 
