@@ -3,7 +3,7 @@ Scripts and some small datafiles for "Multiscale Co-expression in the Brain"
 
 In order to do this analysis thousands of data files were created that are not feasible to share. 
 There are lots of scripts and files needed to just manage all the paths and a large portion of all scripts are dedicated just to manage the files or parititoning data. 
-As a result most of these scripts, in their current form will not be immediately usable. 
+As a result **these scripts, in their current form, will not be immediately usable**. 
 However, in this README we highlight the scripts that include critical functions for key algorithms and functions used in the analysis. 
 
 All of the analysis was done in either python3 or R. An overview of the python3 environment is in `python_requirements.txt`. In the repository  `r_session_info.yaml` describes the R environment. 
@@ -84,7 +84,7 @@ For cases when less than 7 datasets are used for computing the markers we recomp
 
 ### Performance of Modules 
 
-To measure performance of Modules in the network we use the algorithm EGAD, originally published in [Balloz et al 2017 Bioinformatics](https://doi.org/10.1093/bioinformatics/btw695).
+To measure performance of Modules in the network we use the algorithm EGAD, originally published in [Ballouz et al 2017 Bioinformatics](https://doi.org/10.1093/bioinformatics/btw695).
 
 
 ![](https://github.com/bharris12/multiscale_brain/blob/master/figures/egad_cartoon.png)
