@@ -192,5 +192,5 @@ Metacells were computed using the published [package](https://tanaylab.github.io
 
 At the top of the `compute_metacells.sh` script lists the parameters used and the `metacell_scripts.r` file includes the exact functions and code used to run metacells. 
 
-Other than the installed libraries, you just need a loom file for each dataset, that contains the class label column (to remove non-neuronal cells) and the `highly_expressed_7_datasets_75k.csv` file as the gene inputs. You also will have to change input and output paths to use. 
+Other than the listed libraries in either the R session info file or at the top of the `metacell_scripts.r`, you just need a loom file for each dataset, that contains the class label column (to remove non-neuronal cells) and the `highly_expressed_7_datasets_75k.csv` file as the gene inputs. You also will have to change input and output paths to use. 
 
