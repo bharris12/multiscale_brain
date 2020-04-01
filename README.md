@@ -1,6 +1,10 @@
 # Multiscale Co-expression in the Brain
 Scripts and small datafiles for "Multiscale Co-expression in the Brain"
 
+Preprint : https://doi.org/10.1101/2020.03.31.018630
+
+Publication: Under Review
+
  **These scripts, in their current form, will not be immediately usable**. We highlight the scripts that include critical functions for key algorithms and functions used in the analysis. We also include the notebooks used to create figures. 
 
 ### Environment
