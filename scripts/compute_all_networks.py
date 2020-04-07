@@ -55,7 +55,7 @@ def create_nw(data, replace_nans):
         np.array -- ranked co-expression matrix of genes x genes 
     """
     nw = np.corrcoef(data)
-    np.fill_diagonal(data, 1)
+    np.fill_diagonal(nw, 1)
     nw = rank(nw)
     if replace_nans:
         nw[np.isnan(nw)] = bottleneck.nanmean(nw)

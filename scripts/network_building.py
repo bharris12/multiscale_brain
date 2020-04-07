@@ -20,7 +20,7 @@ def create_nw(data, replace_nans):
         np.array -- ranked co-expression matrix of genes x genes 
     """
     nw = np.corrcoef(data)
-    np.fill_diagonal(data, 1)
+    np.fill_diagonal(nw, 1)
     nw = rank(nw)
     if replace_nans:
         nw[np.isnan(nw)] = bottleneck.nanmean(nw)
@@ -50,7 +50,8 @@ def nw_aggregation(nw_paths, genes, file_key='nw'):
     agg_nw = np.zeros([genes.shape[0], genes.shape[0]])
     for nw_path in nw_paths:
         nw = pd.read_hdf(nw_path,file_key)
-        agg_nw +=nw.values
+        fill = bottleneck.nanmean(nw.values,axis=None)
+        agg_nw +=nw.loc[genes,genes].fillna(fill).values
         del nw
         gc.collect()
 
