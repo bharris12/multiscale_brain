@@ -1,5 +1,5 @@
 # Multiscale Co-expression in the Brain
-Scripts and small datafiles for "Multiscale Co-expression in the Brain"
+Benjamin Harris, Megan Crow, Stephan Fischer, Jesse Gillis
 
 Preprint : https://doi.org/10.1101/2020.03.31.018630
 
