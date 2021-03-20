@@ -58,7 +58,7 @@ ipywebrtc==0.5.0
 ipywidgets==7.5.1
 itermplot==0.331
 jedi==0.15.1
-Jinja2==2.10.3
+Jinja2==2.11.3
 jmespath==0.9.4
 joblib==0.14.0
 joypy==0.2.1
