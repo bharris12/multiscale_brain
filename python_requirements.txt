@@ -23,7 +23,7 @@ cloudpickle==1.2.2
 colorama==0.4.1
 conda==4.7.12
 conda-package-handling==1.6.0
-cryptography==3.2
+cryptography==3.3.2
 cycler==0.10.0
 cytoolz==0.10.0
 dask==2.6.0
