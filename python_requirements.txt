@@ -49,7 +49,7 @@ ipykernel==5.1.2
 ipyleaflet==0.11.6
 ipympl==0.2.1
 ipyscales==0.3.0
-ipython==7.8.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 ipyvolume==0.5.2
 ipyvue==1.0.2
